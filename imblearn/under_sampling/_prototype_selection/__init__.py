@@ -13,10 +13,11 @@ from ._edited_nearest_neighbours import EditedNearestNeighbours
 from ._edited_nearest_neighbours import RepeatedEditedNearestNeighbours
 from ._edited_nearest_neighbours import AllKNN
 from ._instance_hardness_threshold import InstanceHardnessThreshold
+from ._gsvmru import GSVMRU
 
 __all__ = [
     'RandomUnderSampler', 'InstanceHardnessThreshold', 'NearMiss',
     'TomekLinks', 'EditedNearestNeighbours', 'RepeatedEditedNearestNeighbours',
     'AllKNN', 'OneSidedSelection', 'CondensedNearestNeighbour',
-    'NeighbourhoodCleaningRule'
+    'NeighbourhoodCleaningRule', 'GSVMRU'
 ]

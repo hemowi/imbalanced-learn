@@ -15,10 +15,11 @@ from ._prototype_selection import EditedNearestNeighbours
 from ._prototype_selection import RepeatedEditedNearestNeighbours
 from ._prototype_selection import AllKNN
 from ._prototype_selection import InstanceHardnessThreshold
+from ._prototype_selection import GSVMRU
 
 __all__ = [
     'ClusterCentroids', 'RandomUnderSampler', 'InstanceHardnessThreshold',
     'NearMiss', 'TomekLinks', 'EditedNearestNeighbours',
     'RepeatedEditedNearestNeighbours', 'AllKNN', 'OneSidedSelection',
-    'CondensedNearestNeighbour', 'NeighbourhoodCleaningRule'
+    'CondensedNearestNeighbour', 'NeighbourhoodCleaningRule', 'GSVMRU'
 ]
