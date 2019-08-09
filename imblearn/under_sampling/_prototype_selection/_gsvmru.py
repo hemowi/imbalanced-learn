@@ -1,8 +1,7 @@
 """Class to perform Granular SVM Repetitive Undersampling (GSVM-RU)."""
 
-# partly based on random undersampler by
-# Authors: Guillaume Lemaitre <g.lemaitre58@gmail.com>
-#          Christos Aridas
+# Authors: Moritz Wiechmann
+#          
 # License: MIT
 
 from __future__ import division
@@ -14,7 +13,7 @@ from sklearn.utils import check_consistent_length
 from sklearn.utils import check_random_state
 from sklearn.utils import safe_indexing
 import sklearn.metrics
-from sklearn import svm
+from sklearn.svm import SVC
 
 from ..base import BaseUnderSampler
 from ...utils import check_target_type
@@ -41,8 +40,11 @@ class GSVMRU(BaseUnderSampler):
                  X_test=None,
                  y_test=None,
                  scoring_function=None,
+                 svm_extract=SVC(),
                  arguments_svm_extract={},
-                 arguments_svm_test={}                
+                 svm_test=SVC(),
+                 arguments_svm_test={},
+                 combine = True                
                  ):
         super(GSVMRU, self).__init__(
             sampling_strategy=sampling_strategy, ratio=ratio)
@@ -52,8 +54,11 @@ class GSVMRU(BaseUnderSampler):
         self.X_test = X_test
         self.y_test = y_test
         self.scoring_function = scoring_function
+        self.svm_extract = svm_extract
         self.arguments_svm_extract = arguments_svm_extract
+        self.svm_test = svm_test
         self.arguments_svm_test = arguments_svm_test
+        self.combine = combine
 
     @staticmethod
     def _check_X_y(X, y):
@@ -67,24 +72,23 @@ class GSVMRU(BaseUnderSampler):
     def _fit_resample(self, X, y):
 
         def _extract_negative_sv_idx(X, y, idx_sv, target_class, **kwargs):
-            clf = svm.SVC(**kwargs)
+            clf = self.svm_extract
+            clf.set_params(**kwargs)
             clf.fit(np.delete(X, idx_sv, axis = 0), np.delete(y, idx_sv, axis = 0))
-            return clf.support_[np.delete(y, idx_sv, axis = 0)[clf.support_] == target_class]
+            # indexes of negative SVs in dataset without already extracted negative SVs
+            idx_negative_sv_ = clf.support_[np.delete(y, idx_sv, axis = 0)[clf.support_] == target_class]
+            # return value: indexes of negative SVs in whole dataset
+            return np.delete(np.arange(y.size), idx_sv, axis = 0)[idx_negative_sv_]
 
         if self.return_indices:
             deprecate_parameter(self, '0.4', 'return_indices',
                                 'sample_indices_')
         random_state = check_random_state(self.random_state)
 
-
         if not self.scoring_function:
             scoring_function_call = False
-        elif hasattr(self.scoring_function, '__call__'):
-            scoring_function_call = self.scoring_function
         else:
-            scoring_function_call = getattr(sklearn.metrics, self.scoring_function, False)
-
-
+            scoring_function_call = sklearn.metrics.get_scorer(self.scoring_function)
         
         idx_under = np.empty((0, ), dtype=int)
         
@@ -96,36 +100,45 @@ class GSVMRU(BaseUnderSampler):
                 idx_sv = np.empty((0, ), dtype=int) # already extracted negative support vectors
 
                 if scoring_function_call:
-                    new_score = -1
-                    best_score = -2
+                    new_larger_best = True
+                    best_score = float("-inf")
 
                     # If a scoring function is provided, negative support vectors are extracted
                     # until prediction performance based on scoring function is not further improved
-                    while best_score < new_score and idx_sv.size < y[y == target_class].size:                       
-                        best_score = new_score
+                    while new_larger_best and idx_sv.size < y[y == target_class].size:                       
+                        
 
                         idx_negative_sv = _extract_negative_sv_idx(X, y, idx_sv, target_class, **self.arguments_svm_extract)
-                        
+
                         # Concatenate indexes of new negative support vectors, already extracted negative support vectors and positive granule
-                        idx_test = np.concatenate(
-                            (idx_sv,
-                            np.delete(idx, idx_sv, axis = 0)[idx_negative_sv],
-                            np.flatnonzero(y != target_class)),
-                            axis=0)
-                        clf = svm.SVC(**self.arguments_svm_test)
+                        if self.combine:
+                            # all extracted negative SVs are used
+                            idx_test = np.concatenate(
+                                (idx_sv,
+                                idx_negative_sv,
+                                np.flatnonzero(y != target_class)),
+                                axis=0)
+                        else:
+                            # only new extracted negative SVs are used
+                            idx_test = np.concatenate(
+                                (idx_negative_sv,
+                                np.flatnonzero(y != target_class)),
+                                axis=0)
+                        clf = self.svm_test
+                        clf.set_params(**self.arguments_svm_test)
                         clf.fit(X[idx_test], y[idx_test])
-                        y_hat = clf.predict(self.X_test) 
-                        new_score = scoring_function_call(self.y_test, y_hat)
-                        # If score is improved, add indexes of negative support vectors to idx_sv
-                        if best_score < new_score:
+                        new_score = scoring_function_call(clf, self.X_test, self.y_test)
+                        # If score is improved, add indexes of negative support vectors to idx_sv and start next iteration
+                        new_larger_best = best_score < new_score
+                        best_score = new_score 
+                        if new_larger_best or idx_sv.size == 0:
+                            idx_new_sv = idx_negative_sv
                             idx_sv = np.concatenate(
                                 (idx_sv,
-                                np.delete(idx, idx_sv, axis = 0)[idx_negative_sv]),
-                                axis=0)                   
-
-
-                        
-                        
+                                idx_negative_sv),
+                                axis=0)                        
+                    if not self.combine:
+                        idx_sv = idx_new_sv
 
                 else:
                     # If no scoring function is provided, positive support vectors are extracted until n_samples is reached.
@@ -142,7 +155,7 @@ class GSVMRU(BaseUnderSampler):
                         # add indexes of negative support vectors to idx_sv
                         idx_sv = np.concatenate(
                             (idx_sv,
-                            np.delete(idx, idx_sv, axis = 0)[idx_negative_sv]),
+                            idx_negative_sv),
                             axis=0)
 
                 index_target_class = idx_sv
