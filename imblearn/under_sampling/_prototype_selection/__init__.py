@@ -16,8 +16,15 @@ from ._instance_hardness_threshold import InstanceHardnessThreshold
 from ._gsvmru import GSVMRU
 
 __all__ = [
-    'RandomUnderSampler', 'InstanceHardnessThreshold', 'NearMiss',
-    'TomekLinks', 'EditedNearestNeighbours', 'RepeatedEditedNearestNeighbours',
-    'AllKNN', 'OneSidedSelection', 'CondensedNearestNeighbour',
-    'NeighbourhoodCleaningRule', 'GSVMRU'
+    "RandomUnderSampler",
+    "InstanceHardnessThreshold",
+    "NearMiss",
+    "TomekLinks",
+    "EditedNearestNeighbours",
+    "RepeatedEditedNearestNeighbours",
+    "AllKNN",
+    "OneSidedSelection",
+    "CondensedNearestNeighbour",
+    "NeighbourhoodCleaningRule",
+    "GSVMRU",
 ]

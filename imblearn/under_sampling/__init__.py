@@ -18,8 +18,16 @@ from ._prototype_selection import InstanceHardnessThreshold
 from ._prototype_selection import GSVMRU
 
 __all__ = [
-    'ClusterCentroids', 'RandomUnderSampler', 'InstanceHardnessThreshold',
-    'NearMiss', 'TomekLinks', 'EditedNearestNeighbours',
-    'RepeatedEditedNearestNeighbours', 'AllKNN', 'OneSidedSelection',
-    'CondensedNearestNeighbour', 'NeighbourhoodCleaningRule', 'GSVMRU'
+    "ClusterCentroids",
+    "RandomUnderSampler",
+    "InstanceHardnessThreshold",
+    "NearMiss",
+    "TomekLinks",
+    "EditedNearestNeighbours",
+    "RepeatedEditedNearestNeighbours",
+    "AllKNN",
+    "OneSidedSelection",
+    "CondensedNearestNeighbour",
+    "NeighbourhoodCleaningRule",
+    "GSVMRU",
 ]

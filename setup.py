@@ -33,8 +33,14 @@ CLASSIFIERS = ['Intended Audience :: Science/Research',
                'Operating System :: Unix',
                'Operating System :: MacOS',
                'Programming Language :: Python :: 3.6',
-               'Programming Language :: Python :: 3.7']
-INSTALL_REQUIRES = ['numpy>=1.11', 'scipy>=0.17', 'scikit-learn>=0.21']
+               'Programming Language :: Python :: 3.7',
+               'Programming Language :: Python :: 3.8']
+INSTALL_REQUIRES = [
+    'numpy>=1.13.3',
+    'scipy>=0.19.1',
+    'scikit-learn>=0.22',
+    'joblib>=0.11'
+]
 EXTRAS_REQUIRE = {
     'tests': [
         'pytest',
@@ -43,11 +49,10 @@ EXTRAS_REQUIRE = {
         'sphinx',
         'sphinx-gallery',
         'sphinx_rtd_theme',
+        'sphinxcontrib-bibtex',
         'numpydoc',
         'matplotlib',
         'pandas',
-        'keras',
-        'tensorflow'
     ]
 }
 

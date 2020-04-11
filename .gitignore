@@ -22,6 +22,8 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+Pipfile
+Pipfile.lock
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -119,3 +121,4 @@ cythonize.dat
 doc/_build/
 doc/auto_examples/
 doc/generated/
+doc/bibtex/auto

@@ -1,5 +1,5 @@
 # make it explicit that we favor the new container-based travis workers
-dist: xenial
+dist: bionic
 sudo: false
 
 language: python
@@ -28,19 +28,15 @@ env:
 
 matrix:
   include:
-    # This environment tests the using anaconda
-    # Ubuntu 14.04 environment
-    - env: DISTRIB="ubuntu"
-    # Latest release
-    - env: DISTRIB="conda" PYTHON_VERSION="3.6"
-           NUMPY_VERSION="*" SCIPY_VERSION="*" SKLEARN_VERSION="0.21"
-    - env: DISTRIB="conda" PYTHON_VERSION="3.7"
-           NUMPY_VERSION="1.13.1" SCIPY_VERSION="0.19.1" SKLEARN_VERSION="0.21"
-    - env: DISTRIB="conda" PYTHON_VERSION="3.7"
+    - env: PYTHON_VERSION="3.7"
            NUMPY_VERSION="*" SCIPY_VERSION="*" SKLEARN_VERSION="master"
-  allow_failures:
-    - env: DISTRIB="conda" PYTHON_VERSION="3.7"
+           OPTIONAL_DEPS="keras" TEST_DOC="true" TEST_NUMPYDOC="false"
+    - env: PYTHON_VERSION="3.7"
            NUMPY_VERSION="*" SCIPY_VERSION="*" SKLEARN_VERSION="master"
+           OPTIONAL_DEPS="tensorflow" TEST_DOC="true" TEST_NUMPYDOC="false"
+    - env: PYTHON_VERSION="3.7"
+           NUMPY_VERSION="*" SCIPY_VERSION="*" SKLEARN_VERSION="master"
+           OPTIONAL_DEPS="false" TEST_DOC="false" TEST_NUMPYDOC="true"
 
 install: source build_tools/travis/install.sh
 script: bash build_tools/travis/test_script.sh

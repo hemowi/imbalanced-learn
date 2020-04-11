@@ -7,16 +7,17 @@ Prerequisites
 
 The imbalanced-learn package requires the following dependencies:
 
-* numpy (>=1.11)
-* scipy (>=0.17)
-* scikit-learn (>=0.21)
+* python (>=3.6)
+* numpy (>=1.13.3)
+* scipy (>=0.19.1)
+* scikit-learn (>=0.22)
 * keras 2 (optional)
 * tensorflow (optional)
 
 Install
 =======
 
-imbalanced-learn is currently available on the PyPi's reporitories and you can
+imbalanced-learn is currently available on the PyPi's repositories and you can
 install it via `pip`::
 
   pip install -U imbalanced-learn
