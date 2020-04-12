@@ -36,7 +36,6 @@ class GSVMRU(BaseUnderSampler):
                  return_indices=False,
                  random_state=None,
                  replacement=False,
-                 ratio=None,
                  X_test=None,
                  y_test=None,
                  scoring_function=None,
@@ -47,7 +46,7 @@ class GSVMRU(BaseUnderSampler):
                  combine = True                
                  ):
         super(GSVMRU, self).__init__(
-            sampling_strategy=sampling_strategy, ratio=ratio)
+            sampling_strategy=sampling_strategy)
         self.random_state = random_state
         self.return_indices = return_indices
         self.replacement = replacement
@@ -72,11 +71,11 @@ class GSVMRU(BaseUnderSampler):
     def _fit_resample(self, X, y):
 
         def _extract_negative_sv_idx(X, y, idx_sv, target_class, **kwargs):
-            clf = self.svm_extract
-            clf.set_params(**kwargs)
-            clf.fit(np.delete(X, idx_sv, axis = 0), np.delete(y, idx_sv, axis = 0))
+            clf_extract = self.svm_extract
+            clf_extract.set_params(**kwargs)
+            clf_extract.fit(np.delete(X, idx_sv, axis = 0), np.delete(y, idx_sv, axis = 0))
             # indexes of negative SVs in dataset without already extracted negative SVs
-            idx_negative_sv_ = clf.support_[np.delete(y, idx_sv, axis = 0)[clf.support_] == target_class]
+            idx_negative_sv_ = clf_extract.support_[np.delete(y, idx_sv, axis = 0)[clf_extract.support_] == target_class]
             # return value: indexes of negative SVs in whole dataset
             return np.delete(np.arange(y.size), idx_sv, axis = 0)[idx_negative_sv_]
 
