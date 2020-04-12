@@ -29,13 +29,42 @@ class GSVMRU(BaseUnderSampler):
     """Class to perform Granular SVM Repetitive Undersampling (GSVM-RU).
     as proposed by  Tang/Zhang/Chawla/Krasser (2009)
     https://doi.org/10.1109/TSMCB.2008.2002909
+
+    Parameters
+    ----------
+    {sampling_strategy}
+
+    {random_state}
+
+    X_test : array, default=None
+        NP array to test if score was improved by latest granule.
+
+    y_test : array, default=None
+    NP array to test if score was improved by latest granule.
+
+    scoring_function : str, default=None
+    sklearn scorer to test if score was improved by latest granule.
+
+    svm_extract : SVC(), default=SVC()
+    sklearn.svm.SVC() SVM to extract support vectors.
+
+    arguments_svm_extract : dict, default=None
+    Arguments to pass into svm_extract.
+
+    svm_test : SVC(), default=SVC()
+    sklearn.svm.SVC() SVM to test if score was improved by latest granule.
+
+    arguments_svm_test : dict, default=None
+    Arguments to pass into svm_test.
+
+    combine : bool, default=True
+    Use combine method. If set to False, discard method is used.
     """
 
     def __init__(self,
                  sampling_strategy='auto',
                  return_indices=False,
                  random_state=None,
-                 replacement=False,
                  X_test=None,
                  y_test=None,
                  scoring_function=None,
@@ -43,13 +72,12 @@ class GSVMRU(BaseUnderSampler):
                  arguments_svm_extract={},
                  svm_test=SVC(),
                  arguments_svm_test={},
-                 combine = True                
+                 combine=True
                  ):
         super(GSVMRU, self).__init__(
             sampling_strategy=sampling_strategy)
         self.random_state = random_state
         self.return_indices = return_indices
-        self.replacement = replacement
         self.X_test = X_test
         self.y_test = y_test
         self.scoring_function = scoring_function
