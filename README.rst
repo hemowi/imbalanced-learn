@@ -4,28 +4,9 @@
 
 .. _scikit-learn-contrib: https://github.com/scikit-learn-contrib
 
-|Azure|_ |Travis|_ |Codecov|_ |CircleCI|_ |PythonVersion|_ |Pypi|_ |Gitter|_
 
-.. |Azure| image:: https://dev.azure.com/imbalanced-learn/imbalanced-learn/_apis/build/status/scikit-learn-contrib.imbalanced-learn?branchName=master
-.. _Azure: https://dev.azure.com/imbalanced-learn/imbalanced-learn/_build
-
-.. |Travis| image:: https://travis-ci.org/scikit-learn-contrib/imbalanced-learn.svg?branch=master
-.. _Travis: https://travis-ci.org/scikit-learn-contrib/imbalanced-learn
-
-.. |Codecov| image:: https://codecov.io/gh/scikit-learn-contrib/imbalanced-learn/branch/master/graph/badge.svg
-.. _Codecov: https://codecov.io/gh/scikit-learn-contrib/imbalanced-learn
-
-.. |CircleCI| image:: https://circleci.com/gh/scikit-learn-contrib/imbalanced-learn.svg?style=shield&circle-token=:circle-token
-.. _CircleCI: https://circleci.com/gh/scikit-learn-contrib/imbalanced-learn/tree/master
-
-.. |PythonVersion| image:: https://img.shields.io/pypi/pyversions/imbalanced-learn.svg
-.. _PythonVersion: https://img.shields.io/pypi/pyversions/imbalanced-learn.svg
-
-.. |Pypi| image:: https://badge.fury.io/py/imbalanced-learn.svg
-.. _Pypi: https://badge.fury.io/py/imbalanced-learn
-
-.. |Gitter| image:: https://badges.gitter.im/scikit-learn-contrib/imbalanced-learn.svg
-.. _Gitter: https://gitter.im/scikit-learn-contrib/imbalanced-learn?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+GSVM-RU implementation for imbalanced-learn
+============================================
 
 imbalanced-learn
 ================
